@@ -106,36 +106,8 @@ if __name__ == '__main__':
     source_base_path_train_aug = 'dataset/train/' + args.subset+'_silvia'
     source_base_path_valid = 'dataset/val/' + args.subset
 
-    target_base_pth = 'datasets/stamp_' + args.subset
+    target_base_pth = 'datasets/stamp_' + args.subset + '_aug'
     COCO_path = args.datapath
 
 
-    process_files(source_base_path_train_aug, target_base_pth, 'train_aug', None)
-
-    # # train_image
-    # copy_file(source_base_path_train, train_img_dst)
-    # # train_label
-    # copy_file('datasets/cityscape/gtFine/train',\
-    #         '*_labelIds.png', train_label_dst)
-    # # train_inst
-    # copy_file('datasets/cityscape/gtFine/train',\
-    #         '*_instanceIds.png', train_inst_dst)
-    # # val_image
-    # copy_file('datasets/cityscape/leftImg8bit/val',\
-    #         '*_leftImg8bit.png', val_img_dst)
-    # # val_label
-    # copy_file('datasets/cityscape/gtFine/val',\
-    #         '*_labelIds.png', val_label_dst)
-    # # val_inst
-    # copy_file('datasets/cityscape/gtFine/val',\
-    #         '*_instanceIds.png', val_inst_dst)
-
-    # if not os.path.exists(train_bbox_dst):
-    #     os.makedirs(train_bbox_dst)
-    # if not os.path.exists(val_bbox_dst):
-    #     os.makedirs(val_bbox_dst)
-    # # wrote a bounding box summary 
-    # construct_box('datasets/cityscape/gtFine/train',\
-    #         '*_instanceIds.png', '*_labelIds.png', train_bbox_dst)
-    # construct_box('datasets/cityscape/gtFine/val',\
-    #         '*_instanceIds.png', '*_labelIds.png', val_bbox_dst) 
+    process_files(source_base_path_train_aug, target_base_pth, 'train', None)
