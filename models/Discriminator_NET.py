@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from layer_util import *
+from models.layer_util import *
 import numpy as np
 import functools
 
@@ -383,7 +383,7 @@ def switch_grad(net, switch_flag):
 # Discriminator with Projection Layer + Spectral Normalization
 ##############################################################################
 # TODO(sh): update hard-coded dims
-from sn_utils import *
+from models.sn_utils import *
 class Res_Discriminator(nn.Module):
     """
         ResNet Like Discriminator with condition

@@ -6,8 +6,8 @@ import torch.nn.parallel
 import functools
 from torch.autograd import Variable
 import numpy as np
-from layer_util import *
-from MaskContextAE_NET import MaskContextAE_NET
+from models.layer_util import *
+from models.MaskContextAE_NET import MaskContextAE_NET
 
 
 class MaskTwoStreamConvSwitch_NET(MaskContextAE_NET):

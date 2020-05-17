@@ -55,8 +55,6 @@ def construct_box(inst_root, label_root, dst):
             json.dump(inst_info, f, cls=NpEncoder)
         print('wrote a bbox summary of %s to %s' % (inst, savename))
 
-
-
 def copy_label(src_path, dst_path1, dst_path2):
     for img_name in tqdm(os.listdir(src_path)):
         if '.png' in img_name:
@@ -80,7 +78,8 @@ def process_files(source_base_path, target_base_pth, subset, COCO_path):
     copy_label(source_base_path, dst_path['label'], dst_path['inst'])
     ### copy_file(dst_path['label'], dst_path['inst'])
     print('process img copy')
-    copy_img_file(source_base_path, dst_path['img'], COCO_path+'/'+subset+'2017')
+    if COCO_path:
+        copy_img_file(source_base_path, dst_path['img'], COCO_path+'/'+subset+'2017')
     construct_box(dst_path['inst'], dst_path['label'], dst_path['bbox'])
 
 def copy_img_file(source_base_path, target_base_path, COCO_path):
@@ -104,34 +103,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     source_base_path_train = 'dataset/train/' + args.subset
+    source_base_path_train_aug = 'dataset/train/' + args.subset+'_silvia'
     source_base_path_valid = 'dataset/val/' + args.subset
 
     target_base_pth = 'datasets/stamp_' + args.subset
     COCO_path = args.datapath
-    # train_img_dst = os.path.join(target_base_pth, 'train_img')
-    # train_label_dst = os.path.join(target_base_pth, 'train_label')
-    # train_inst_dst = os.path.join(target_base_pth, 'train_inst')
-    # train_bbox_dst = os.path.join(target_base_pth, 'train_bbox')
-    # val_img_dst = os.path.join(target_base_pth, 'val_img')
-    # val_label_dst = os.path.join(target_base_pth, 'val_label')
-    # val_inst_dst = os.path.join(target_base_pth, 'val_inst')
-    # val_bbox_dst = os.path.join(target_base_pth, 'val_bbox')
 
-    # if not os.path.exists(train_img_dst):
-    #     os.makedirs(train_img_dst)
-    # if not os.path.exists(train_label_dst):
-    #     os.makedirs(train_label_dst)
-    # if not os.path.exists(train_inst_dst):
-    #     os.makedirs(train_inst_dst)
-    # if not os.path.exists(val_img_dst):
-    #     os.makedirs(val_img_dst)
-    # if not os.path.exists(val_label_dst):
-    #     os.makedirs(val_label_dst)
-    # if not os.path.exists(val_inst_dst):
-    #     os.makedirs(val_inst_dst)
 
-    process_files(source_base_path_train, target_base_pth, 'train', COCO_path)
-    process_files(source_base_path_valid, target_base_pth, 'val', COCO_path)
+    process_files(source_base_path_train_aug, target_base_pth, 'train_aug', None)
+
     # # train_image
     # copy_file(source_base_path_train, train_img_dst)
     # # train_label

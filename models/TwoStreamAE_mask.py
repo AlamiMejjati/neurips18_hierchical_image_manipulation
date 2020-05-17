@@ -6,10 +6,10 @@ import torch.nn as nn
 import os
 from torch.autograd import Variable
 from util.image_pool import ImagePool
-from base_model import BaseModel
-from Discriminator_NET import NLayerDiscriminator, NLayerResDiscriminator, MultiscaleDiscriminator, lr_control 
-from mask_losses import MaskReconLoss
-from losses import compute_gan_loss, GANLoss
+from models.base_model import BaseModel
+from models.Discriminator_NET import NLayerDiscriminator, NLayerResDiscriminator, MultiscaleDiscriminator, lr_control
+from models.mask_losses import MaskReconLoss
+from models.losses import compute_gan_loss, GANLoss
 
 class TwoStreamAE_mask(BaseModel):
     def __init__(self, opt):
@@ -27,9 +27,9 @@ class TwoStreamAE_mask(BaseModel):
         self.opt = opt
         
         if opt.no_comb:
-            from MaskTwoStreamConvSwitch_NET import MaskTwoStreamConvSwitch_NET as model_factory
+            from models.MaskTwoStreamConvSwitch_NET import MaskTwoStreamConvSwitch_NET as model_factory
         else:
-            from MaskTwoStreamConv_NET import MaskTwoStreamConv_NET as model_factory
+            from models.MaskTwoStreamConv_NET import MaskTwoStreamConv_NET as model_factory
 
         model = self.get_model(model_factory)
         self.netG = model(opt)

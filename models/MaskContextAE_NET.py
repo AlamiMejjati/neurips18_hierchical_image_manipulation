@@ -6,7 +6,7 @@ import torch.nn.parallel
 import functools
 from torch.autograd import Variable
 import numpy as np
-from layer_util import *
+from models.layer_util import *
 
 class MaskContextAE_NET(nn.Module):
     def __init__(self, opt):

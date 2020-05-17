@@ -1,6 +1,6 @@
 """Trainining configurations for mask generation."""
 
-from box2mask_base_options import BoxToMaskOptions
+from options.box2mask_base_options import BoxToMaskOptions
 
 class BoxToMaskTrainOptions(BoxToMaskOptions):
     def initialize(self):
