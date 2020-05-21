@@ -1,7 +1,7 @@
 python vis_box2mask.py \
---dataroot datasets/stamp_giraffe_run/ \
+--dataroot datasets/stamp_giraffe/ \
 --dataloader stamp \
---name CVPR_pretrained_box2mask_stamp_giraffe \
+--name cvpr_stamp_giraffe_box2mask \
 --prob_bg 0.1 \
 --label_nc 35 \
 --output_nc 35 \
