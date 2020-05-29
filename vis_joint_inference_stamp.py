@@ -47,7 +47,7 @@ data_loader = SegmentationDataset()
 data_loader.initialize(opt_maskgen)
 visualizer = Visualizer(opt_maskgen)
 # create website
-base_name = joint_opt.base_name  # 'giraffe_run'
+base_name = os.path.join('./results_KID', joint_opt.base_name)  # 'giraffe_run'
 web_dir = os.path.join('./results', base_name, 'val')
 
 webpage = html.HTML(web_dir, 'Experiment = %s, Phase = %s' %
@@ -60,14 +60,16 @@ if not os.path.exists('./results/test_joint_inference'):
     os.makedirs('./results/test_joint_inference')
 save_dir = './results/test_joint_inference/'
 print(data_loader.dataset_size)
+nbmasks = int(data_loader.dataset_size)/5
 for i in range(data_loader.dataset_size):
-    if i >= joint_opt.how_many:
-        break
     try:
         # Get data
+        bg_nb = i // nbmasks
+        box_id = np.mod(i, nbmasks)
         raw_inputs, inst_info = data_loader.get_raw_inputs(i)
-        img_orig, label_orig = joint_inference_model.normalize_input( \
-            raw_inputs['image'], raw_inputs['label'], normalize_image=False)
+        img_orig, label_orig = joint_inference_model.normalize_input(raw_inputs['image'], raw_inputs['label'],
+                                                                     normalize_image=False)
+
         # Add a dimension
         img_orig = img_orig.unsqueeze(0)
         label_orig = label_orig.unsqueeze(0)
@@ -89,13 +91,10 @@ for i in range(data_loader.dataset_size):
         #   print(image[0].shape)
 
         label_path = raw_inputs['label_path']
-        label_filename = os.path.basename(label_path)
+        label_filename = 'm_%d_bg_%d.png' %(box_id, bg_nb)
+        label_imfilename = 'm_%d_bg_%d.png' % (box_id, bg_nb)
         img_to_write = layout.cpu().data.numpy()[0]
         cur_path = f'{base_name}/mask'
-        if not os.path.exists(cur_path):
-            os.makedirs(cur_path)
-        io.imsave(f'{cur_path}/{label_filename}', img_to_write[0].astype('uint8'))
-        cur_path = f'{base_name}/mask_bin'
         if not os.path.exists(cur_path):
             os.makedirs(cur_path)
         io.imsave(f'{cur_path}/{label_filename}', img_to_write[0] / 30)
@@ -103,16 +102,12 @@ for i in range(data_loader.dataset_size):
         if not os.path.exists(cur_path):
             os.makedirs(cur_path)
         img_to_write = image.cpu().data.numpy()[0]
-        io.imsave(f'{cur_path}/{label_filename}', np.transpose(img_to_write, (1, 2, 0)))
+        io.imsave(f'{cur_path}/{label_imfilename}', np.transpose(img_to_write, (1, 2, 0)))
 
         visuals = OrderedDict([
             ('input_image_patch', util.tensor2im(test_dict['image'][0])),
             ('predicted_label_patch', util.tensor2label(test_dict['label'][0], opt_maskgen.label_nc)),
             ('predicted_image_patch', util.tensor2im(img_generated[0])),
-            # ('input_mask', util.tensor2label(test_dict['mask_in'][0], 2)),
-            # ('label_orig', util.tensor2label(layout_dict['label_orig'][0], opt_maskgen.label_nc)),
-            # ('mask_ctx_in_orig', util.tensor2label(layout_dict['mask_ctx_in_orig'][0], opt_maskgen.label_nc)),
-            # ('mask_out_orig', util.tensor2im(layout_dict['mask_out_orig'][0])),
             ('GT_label_canvas', util.tensor2label(label_orig[0], opt_maskgen.label_nc)),
             ('predicted_label_canvas', util.tensor2label(layout[0], opt_maskgen.label_nc)),
             ('GT_image_canvas', util.tensor2im(img_orig[0], normalize=False)),
